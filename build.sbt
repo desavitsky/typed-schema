@@ -114,6 +114,7 @@ val scalatestScalacheck = "org.scalatestplus" %% "scalacheck-1-15" % Version.sca
 
 val akka   = List("actor", "stream").map(module => "com.typesafe.akka" %% s"akka-$module" % Version.akka)
 val zio    = List("dev.zio" %% "zio" % Version.zio, "dev.zio" %% "zio-interop-cats" % Version.zioCats)
+val zio2   = List("dev.zio" %% "zio" % Version.zio2, "dev.zio" %% "zio-interop-cats" % Version.zio2Cats2)
 val tethys = List("core", "jackson").map(module => "com.tethys-json" %% s"tethys-$module" % Version.tethys)
 
 val reflect          = libraryDependencies += scalaOrganization.value   % "scala-reflect"           % scalaVersion.value
@@ -236,6 +237,15 @@ lazy val finagleZio = project
     libraryDependencies ++= catsEffect :: zio
   )
 
+lazy val finagleZio2 = project
+  .in(file("modules/finagle-zio2"))
+  .dependsOn(finagle)
+  .settings(
+    commonSettings,
+    moduleName := "typed-schema-finagle-zio2",
+    libraryDependencies ++= catsEffect :: zio2
+  )
+
 lazy val finagleCommon = project
   .in(file("modules/finagle-common"))
   .dependsOn(finagle, swagger)
@@ -320,6 +330,7 @@ lazy val typedschema =
       akkaHttp,
       finagle,
       finagleZio,
+      finagleZio2,
       finagleEnv,
       finagleCirce,
       finagleTethys,
